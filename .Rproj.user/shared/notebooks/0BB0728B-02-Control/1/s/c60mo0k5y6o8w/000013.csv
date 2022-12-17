@@ -1,0 +1,2 @@
+"0","formatters <- get_formatters(df, errors)"
+"0","formattable(df, formatters) %>% as.datatable(editable = TRUE)"

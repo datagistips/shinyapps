@@ -1,0 +1,12 @@
+"0","```r
+library(jsonlite)
+url <- \"https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json\"
+j <- jsonlite::fromJSON(url)
+names(j)
+```"
+"1"," [1] \"$schema\"      \"name\"         \"title\"        \"description\" 
+ [5] \"keywords\"     \"countryCode\"  \"homepage\"     \"path\"        
+ [9] \"image\"        \"licenses\"     \"resources\"    \"sources\"     
+[13] \"created\"      \"lastModified\" \"version\"      \"contributors\"
+[17] \"fields\"       \"primaryKey\"  
+"

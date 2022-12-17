@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<link href="shared/selectize/css/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="shared/selectize/js/selectize.min.js"></script>
+<script src="shared/selectize/accessibility/js/selectize-plugin-a11y.min.js"></script>
+
+</head>
+<body>
+<div class="form-group shiny-input-container">
+  <label class="control-label" id="ui_classification-label" for="ui_classification">Classification de l'objet.</label>
+  <div>
+    <select id="ui_classification"><option value="Classification A" selected>Classification A</option>
+<option value="Classification B">Classification B</option>
+<option value="Classification C">Classification C</option></select>
+    <script type="application/json" data-for="ui_classification" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+  </div>
+</div>
+</body>
+</html>

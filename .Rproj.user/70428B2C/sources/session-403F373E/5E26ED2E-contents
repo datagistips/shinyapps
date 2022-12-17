@@ -1,0 +1,124 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Lire le résultat :
+```{r}
+library(jsonlite)
+
+schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
+# data_url <- "https://datagistips.shinyapps.io/tableschema/some-data/data.csv"
+data_url <- "https://datagistips.shinyapps.io/tableschema-beta/data-to-control.csv"
+
+url <- glue("https://api.validata.etalab.studio/validate?schema={schema_url}&url={data_url}") %>% URLencode
+
+url
+```
+
+Launch request
+```{r}
+j <- jsonlite::fromJSON(url)
+```
+
+Erreurs
+```{r}
+errors <- j$report$tasks$errors[[1]]
+errors
+```
+
+
+```{r}
+errors <- errors %>% 
+  select(rowNumber, fieldNumber, fieldName, code, description, message)
+
+errors
+```
+
+## control_data
+On crée une fonction qui récupère les erreurs depuis un schéma et une donnée :
+```{r}
+schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
+data_url <- "https://datagistips.shinyapps.io/tableschema/some-data/data.csv"
+
+control_data <- function(df) {
+  url <- glue("https://api.validata.etalab.studio/validate?schema={schema_url}&url={data_url}") %>% URLencode
+
+  j <- jsonlite::fromJSON(url)
+  errors <- j$report$tasks$errors[[1]]
+  errors <- errors %>% 
+    select(rowNumber, fieldNumber, fieldName, code, description, message)
+  errors
+}
+
+errors <- control_data(df)
+errors
+```
+
+Data frame
+```{r}
+df <- read.csv(url(data_url))
+```
+
+```{r}
+formattable(df, 
+                list(
+                  id = formatter("span", 
+                                 style = ~ style(`background-color` = ifelse(df$tsc_row_id == 1, "transparent", "red"), padding = "5px")))) %>% as.datatable(editable = TRUE)
+```
+
+On génère les couleurs pour un champ :
+```{r}
+get_formatter <- function(errors, df, field_name) {
+  n <- nrow(df)
+  couleurs <- vector(mode = "character", length = n)
+  couleurs <- rep("transparent", n)
+  w <- errors$rowNumber[errors$fieldName == field_name] %>% na.omit
+  couleurs[w] <- "red"
+  f <- formatter("span",
+                     style = ~ style(`background-color` = couleurs,
+                                     padding = "5px"))
+  f
+}
+
+get_formatter(errors, df, field_name = "id")
+get_formatter(errors, df, field_name = "nom")
+get_formatter(errors, df, field_name = "classification")
+get_formatter(errors, df, field_name = "date_creation")
+```
+
+On récupère les couleurs pour l'ensemble des champs :
+```{r}
+get_formatters <- function(df, errors) {
+  couleurs <- lapply(names(df), function(x) get_formatter(errors, df, x))
+  names(couleurs) <- names(df)
+  couleurs  
+}
+
+get_formatters(df, errors)
+```
+
+On teste le rendu
+```{r}
+formatters <- get_formatters(df, errors)
+formattable(df, formatters) %>% as.datatable(editable = TRUE)
+```
+On crée une fonction qui rend le data frame en fonction des erreurs :
+```{r}
+render_data <- function(df, errors) {
+  formatters <- get_formatters(df, errors)
+  formattable(df, formatters) %>% as.datatable(editable = TRUE)
+}
+
+render_data(df, errors)
+```
+
+
+
+## Process
+Voici le processus global :
+```{r}
+errors <- control_data(df)
+render_data(df, errors)
+```
+

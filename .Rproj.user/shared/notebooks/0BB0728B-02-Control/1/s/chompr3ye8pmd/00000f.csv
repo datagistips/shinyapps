@@ -1,0 +1,32 @@
+"0","get_formatter <- function(errors, df, field_name) {"
+"0","  n <- nrow(df)"
+"0","  couleurs <- vector(mode = ""character"", length = n)"
+"0","  couleurs <- rep(""transparent"", n)"
+"0","  w <- errors$rowNumber[errors$fieldName == field_name] %>% na.omit"
+"0","  couleurs[w] <- ""red"""
+"0","  f <- formatter(""span"","
+"0","                     style = ~ style(`background-color` = couleurs,"
+"0","                                     padding = ""5px""))"
+"0","  f"
+"0","}"
+"0",""
+"0","get_formatter(errors, df, field_name = ""id"")"
+"1","formatter(.tag = ""span"", style = ~style(`background-color` = couleurs, 
+"
+"1","    padding = ""5px""))
+"
+"0","get_formatter(errors, df, field_name = ""nom"")"
+"1","formatter(.tag = ""span"", style = ~style(`background-color` = couleurs, 
+"
+"1","    padding = ""5px""))
+"
+"0","get_formatter(errors, df, field_name = ""classification"")"
+"1","formatter(.tag = ""span"", style = ~style(`background-color` = couleurs, 
+"
+"1","    padding = ""5px""))
+"
+"0","get_formatter(errors, df, field_name = ""date_creation"")"
+"1","formatter(.tag = ""span"", style = ~style(`background-color` = couleurs, 
+"
+"1","    padding = ""5px""))
+"

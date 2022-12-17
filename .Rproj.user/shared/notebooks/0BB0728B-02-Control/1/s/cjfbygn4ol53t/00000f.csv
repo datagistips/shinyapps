@@ -1,0 +1,39 @@
+"0","get_formatters <- function(df, errors) {"
+"0","  couleurs <- lapply(names(df), function(x) get_formatter(errors, df, x))"
+"0","  names(couleurs) <- names(df)"
+"0","  couleurs  "
+"0","}"
+"0",""
+"0","get_formatters(df, errors)"
+"1","$id
+"
+"1","formatter(.tag = ""span"", style = ~style(`background-color` = couleurs, 
+"
+"1","    padding = ""5px""))
+"
+"1","
+"
+"1","$nom
+"
+"1","formatter(.tag = ""span"", style = ~style(`background-color` = couleurs, 
+"
+"1","    padding = ""5px""))
+"
+"1","
+"
+"1","$classification
+"
+"1","formatter(.tag = ""span"", style = ~style(`background-color` = couleurs, 
+"
+"1","    padding = ""5px""))
+"
+"1","
+"
+"1","$date_creation
+"
+"1","formatter(.tag = ""span"", style = ~style(`background-color` = couleurs, 
+"
+"1","    padding = ""5px""))
+"
+"1","
+"

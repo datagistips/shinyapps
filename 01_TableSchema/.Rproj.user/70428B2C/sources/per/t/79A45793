@@ -1,0 +1,26 @@
+{
+    "id": "79A45793",
+    "path": "C:/Users/mathieu.rajerison/Desktop/perso/Git-repos/shinyapps/01_TableSchema/app.R",
+    "project_path": "app.R",
+    "type": "r_source",
+    "hash": "187690950",
+    "contents": "",
+    "dirty": false,
+    "created": 1671404218863.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "205,47",
+        "scrollLine": "195"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1671404869,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1671404869556,
+    "read_only": false,
+    "read_only_alternatives": []
+}

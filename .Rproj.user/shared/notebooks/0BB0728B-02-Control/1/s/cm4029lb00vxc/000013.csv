@@ -1,0 +1,4 @@
+"0","errors <- errors %>% "
+"0","  select(rowNumber, fieldNumber, fieldName, code, description, message)"
+"0",""
+"0","errors"

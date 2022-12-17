@@ -1,0 +1,1 @@
+{"dependencies":{"name":"selectize","version":"0.12.4","src":{"href":"shared\/selectize"},"meta":[[]],"script":[["js\/selectize.min.js","accessibility\/js\/selectize-plugin-a11y.min.js"]],"stylesheet":"css\/selectize.bootstrap3.css","head":[[]],"attachment":[[]],"package":[[]],"all_files":true},"metadata":{"classes":"shiny.tag","sizingPolicy":[]}}

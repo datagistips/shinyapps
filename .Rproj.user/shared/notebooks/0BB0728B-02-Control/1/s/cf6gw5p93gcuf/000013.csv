@@ -1,0 +1,4 @@
+"0","formattable(df, "
+"0","                list("
+"0","                  id = formatter(""span"", "
+"0","                                 style = ~ style(`background-color` = ifelse(df$tsc_row_id == 1, ""transparent"", ""red""), padding = ""5px"")))) %>% as.datatable(editable = TRUE)"

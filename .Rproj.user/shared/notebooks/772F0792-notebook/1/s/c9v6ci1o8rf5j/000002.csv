@@ -1,0 +1,23 @@
+"0","```r
+get_uis <- function(fields) {
+  uis <- vector(mode = \"list\")
+  for(i in 1:nrow(fields)) {
+    field <- fields[i, ]
+    ui <- get_ui(field)
+    uis[[i]] <- ui
+  }
+  # Give the field name to the list of UIs
+  names(uis) <- fields$name
+  return(uis)
+}
+
+uis <- get_uis(fields)
+```"
+"1","[1] \"integer\"
+[1] \"date\"
+[1] \"string\"
+[1] \"string\"
+"
+"0","```r
+uis[[1]]
+```"

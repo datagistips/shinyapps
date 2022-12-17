@@ -1,0 +1,120 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(jsonlite)
+url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
+j <- jsonlite::fromJSON(url)
+names(j)
+```
+
+```{r}
+fields <- j$fields
+fields
+```
+```{r}
+library(shiny)
+library(glue)
+
+get_ui <- function(field) {
+  name <- field$name
+  example <- field$example
+  description <- field$description
+  constraints <- field$constraints
+  
+  ui_id <- glue("ui_{name}")
+  
+  # REQUIRED
+  if(is.na(constraints$required)) {
+    name_display <- name
+  } else {
+    true_values <- c("true", "TRUE", "True", "1")
+    false_values <- c("false", "FALSE", "False", "0")
+    required <- constraints$required %in% true_values
+    if(required) {
+      name_display <- glue("{name}*")
+    } else {
+      name_display <- names
+    }
+  }
+  
+  # TEXT OUTPUT
+  if(field$type == "string") {
+    print("string")
+    enum <- constraints$enum
+    if(is.null(enum)) {
+      ui <- textInput(ui_id, description, placeholder = example)
+    } else {
+      enum <- enum[[1]]
+      names(enum) <- enum
+      ui <- selectInput(ui_id, description, choices = enum, multiple = FALSE)
+    }
+  }
+
+  # NUMERIC INPUT
+  if(field$type == "integer") {
+    print("integer")
+    min_value <- constraints$minimum
+    max_value <- constraints$maximum
+    if(is.null(min_value) & is.null(max_value)) {
+      ui <- numericInput(ui_id, description, value = 0)
+    }
+    if(!is.null(min_value) & is.null(max_value)) {
+      ui <- numericInput(ui_id, description, value = min_value, min = min_value)
+    }
+    if(!is.null(min_value) & !is.null(max_value)) {
+      ui <- numericInput(ui_id, description, value = min_value, min = min_value, max = max_value)
+    }
+  }
+  
+  # DATE INPUT
+  if(field$type == "date") {
+    print("date")
+    ui <- dateInput(ui_id, description, value = Sys.Date())
+  }
+  
+  return(ui)
+}
+
+get_ui(fields[1, ])
+```
+
+```{r}
+get_uis <- function(fields) {
+  uis <- vector(mode = "list")
+  for(i in 1:nrow(fields)) {
+    field <- fields[i, ]
+    ui <- get_ui(field)
+    uis[[i]] <- ui
+  }
+  # Give the field name to the list of UIs
+  names(uis) <- fields$name
+  return(uis)
+}
+
+uis <- get_uis(fields)
+uis[[1]]
+uis[["classification"]]
+```
+
+Informations relatives au schéma :
+```{r}
+get_description <- function(j) {
+  name <- j$name
+  title <- j$title
+  description <- j$description
+  contributors <- j$contributors
+  contributors <- glue("{contributors$title} ({contributors$email}") %>% paste(collapse=", ")
+  
+  tagList(tags$h1(name), 
+          tags$p(title),
+          tags$p(description),
+          tags$p("Authors : ", contributors))
+}
+
+get_description(j)
+```
+
+
