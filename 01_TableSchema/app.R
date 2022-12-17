@@ -5,11 +5,15 @@ library(DT)
 library(glue)
 
 # Read TableSchema
-url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
-j <- jsonlite::fromJSON(url)
-fields <- j$fields
+schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
+j <- jsonlite::fromJSON(schema_url)
 
-# FUNCTIONS
+# FUNCTIONS ----
+get_fields <- function(j) {
+  fields <- j$fields
+  fields
+}
+
 get_ui <- function(field) {
   # Gets the UI for a specific field
   
@@ -104,17 +108,11 @@ get_description <- function(j) {
   contributors <- j$contributors
   contributors <- glue("{contributors$title} ({contributors$email}") %>% paste(collapse=", ")
   
-  tagList(tags$p("Name : ", tags$a(href = url, name)), 
+  tagList(tags$p("Name : ", name), 
           tags$p("Title : ", title),
           tags$p("Description : ", description),
           tags$p("Authors : ", contributors))
 }
-
-# Calculate description
-schema_description <- get_description(j)
-
-# Calculate UI elements
-uis <- get_uis(fields)
 
 # NOW is the app !
 
@@ -127,7 +125,8 @@ ui <- fluidPage(
     # Some description
     tags$p(tags$i("This apps reads a ", tags$a(href="https://specs.frictionlessdata.io/table-schema/", "TableSchema"), " and generates a form depending on the fields listed in the schema")),
     tags$p("This is an adaptation of Etalab", tags$a(href="https://github.com/etalab/csv-gg", "CSV-GG")),
-    schema_description,
+    uiOutput("ui_description"),
+    tagList("Schema URL (you can set it)", textInput("schema_url", label = NULL, value = schema_url, width = "50%")),
     tags$hr(),
 
     sidebarLayout(
@@ -154,9 +153,32 @@ ui <- fluidPage(
 # Define server logic
 server <- function(input, output) {
   
+  # Get schema URL
+  r_fields <- reactive({
+    schema_url <- input$schema_url
+    j <- jsonlite::fromJSON(schema_url)
+    fields <- get_fields(j)
+    return(fields)
+  })
+  
+  # Get schema description
+  r_description <- reactive({
+    return(get_description(j))
+  })
+  
+  # Render description
+  output$ui_description <- renderUI({
+    r_description()
+  })
+  
+  # Get UIS
+  r_uis <- reactive({
+    return(get_uis(r_fields()))
+  })
+  
   # Generate input panel
   output$ui_inputs <- renderUI({
-    tagList(uis)
+    tagList(r_uis())
   })
   
   # Store the row
