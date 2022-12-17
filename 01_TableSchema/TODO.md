@@ -9,3 +9,4 @@
 	- https://www.r-bloggers.com/2021/01/adding-action-buttons-in-rows-of-dt-data-table-in-r-shiny/
 	- https://stackoverflow.com/questions/28274584/get-selected-row-from-datatable-in-shiny-app
 	- https://community.rstudio.com/t/getting-data-of-selected-rows-in-dt-table-in-shiny-app/134800
+- Intelligent ids with uids
