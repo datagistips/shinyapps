@@ -1,7 +1,11 @@
 # TODO list
 - Control Checks
-- Upload an existing CSV and editing it
+- [x] Upload an existing CSV and editing it
 - More fields : boolean, ...
 - Experimental fields : geo
 - Control the validity of the data frame with frictionless
 - Click on row and edit it on the left
+- Add action buttons : 
+	- https://www.r-bloggers.com/2021/01/adding-action-buttons-in-rows-of-dt-data-table-in-r-shiny/
+	- https://stackoverflow.com/questions/28274584/get-selected-row-from-datatable-in-shiny-app
+	- https://community.rstudio.com/t/getting-data-of-selected-rows-in-dt-table-in-shiny-app/134800

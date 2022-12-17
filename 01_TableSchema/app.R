@@ -2,10 +2,12 @@ library(shiny)
 library(jsonlite)
 library(tidyverse)
 library(DT)
+library(glue)
 
 # Read TableSchema
 url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
 j <- jsonlite::fromJSON(url)
+fields <- j$fields
 
 # FUNCTIONS
 get_ui <- function(field) {
@@ -137,7 +139,10 @@ ui <- fluidPage(
 
       # Show a table of the data
       mainPanel(
+        fileInput("upload", NULL, buttonLabel = "Modify a CSV...", multiple = FALSE, accept = c(".csv")),
         uiOutput("ui_text"),
+        tags$br(),
+        uiOutput("ui_edit_buttons"),
         tags$br(),
         dataTableOutput("ui_table"),
         uiOutput("ui_download")
@@ -186,6 +191,34 @@ server <- function(input, output) {
     datatable(r_data$data, editable = TRUE)
   })
   
+  # Render edit buttons  
+  output$ui_edit_buttons <- renderUI({
+    if(!is.null(input$ui_table_rows_selected)) {
+      s <- ifelse(length(input$ui_table_rows_selected) == 1, "row", "rows")
+      tagList(
+        # actionButton("edit", "Edit"),
+        actionButton("delete", glue("Delete {s}"), icon = icon("trash")),
+        actionButton("copy", glue("Copy {s}"), icon = icon("copy"))
+        )
+    }
+  })
+  
+  # Delete rows
+  observeEvent(input$delete, {
+    w <- input$ui_table_rows_selected
+    r_data$data <- r_data$data[-w, ]
+  })
+  
+  # Copy rows
+  observeEvent(input$copy, {
+    # Get selected rows
+    w <- input$ui_table_rows_selected
+    rows <- r_data$data[w, ]
+    print(rows)
+    # Duplicate them
+    r_data$data <- rbind(rows, r_data$data)
+  })
+  
   # Present the data (number of rows)
   output$ui_text <- renderUI({
     if(is.null(r_data$data)) {
@@ -217,9 +250,17 @@ server <- function(input, output) {
   # Download button or not download button
   output$ui_download <- renderUI({
     if(!is.null(r_data$data)) {
-      tagList(tags$hr(),
-              downloadButton("download", "Download as CSV !", icon = icon("download")))
+      tagList(
+        tags$br(),
+        downloadButton("download", "Download as CSV !", icon = icon("download")))
     }
+  })
+  
+  # Upload
+  observe({
+    req(input$upload)
+    datapath <- input$upload$datapath
+    r_data$data <- read.csv(datapath)
   })
 }
 
