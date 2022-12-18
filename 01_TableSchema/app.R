@@ -8,7 +8,7 @@ library(glue)
 schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
 j <- jsonlite::fromJSON(schema_url)
 
-# FUNCTIONS ----
+# > FUNCTIONS ----
 get_fields <- function(j) {
   fields <- j$fields
   fields
@@ -116,7 +116,7 @@ get_description <- function(j) {
 
 # NOW is the app !
 
-# UI ----
+# > UI ----
 ui <- fluidPage(
     
     # Title panel
@@ -149,9 +149,11 @@ ui <- fluidPage(
     )
 )
 
-# SERVER ----
+# > SERVER ----
 # Define server logic
 server <- function(input, output) {
+  
+  # REACTIVE VALUES ----
   
   # Get schema URL
   r_fields <- reactive({
@@ -166,21 +168,10 @@ server <- function(input, output) {
     return(get_description(j))
   })
   
-  # Render description
-  output$ui_description <- renderUI({
-    r_description()
-  })
-  
   # Get UIS
   r_uis <- reactive({
     return(get_uis(r_fields()))
   })
-  
-  # Generate input panel
-  output$ui_inputs <- renderUI({
-    tagList(r_uis())
-  })
-  
   # Store the row
   r_row <- reactive({
     # Select only form inputs (they start with 'ui__')
@@ -198,14 +189,17 @@ server <- function(input, output) {
   # This reactive Value will store the data frame  
   r_data <- reactiveValues(data = NULL)
   
-  # If you click on Add, it wil the row to the data
-  observeEvent(input$add, {
-    df <- r_data$data
-    if(is.null(df)) {
-      r_data$data <- r_row()
-    } else {
-      r_data$data <- rbind(df, r_row())
-    }
+  
+  # OUTPUTS ----
+  
+  # Render description
+  output$ui_description <- renderUI({
+    r_description()
+  })
+  
+  # Generate input panel
+  output$ui_inputs <- renderUI({
+    tagList(r_uis())
   })
   
   # Render data (which is in a reactive value)
@@ -225,22 +219,6 @@ server <- function(input, output) {
     }
   })
   
-  # Delete rows
-  observeEvent(input$delete, {
-    w <- input$ui_table_rows_selected
-    r_data$data <- r_data$data[-w, ]
-  })
-  
-  # Copy rows
-  observeEvent(input$copy, {
-    # Get selected rows
-    w <- input$ui_table_rows_selected
-    rows <- r_data$data[w, ]
-    print(rows)
-    # Duplicate them
-    r_data$data <- rbind(rows, r_data$data)
-  })
-  
   # Present the data (number of rows)
   output$ui_text <- renderUI({
     if(is.null(r_data$data)) {
@@ -251,15 +229,7 @@ server <- function(input, output) {
     }
   })
   
-  # Update the data frame if you edit the table
-  observeEvent(input$ui_table_cell_edit, {
-    i  <- input$ui_table_cell_edit$row
-    j <- input$ui_table_cell_edit$col
-    value <- input$ui_table_cell_edit$value
-    r_data$data[i, j] <- value
-  })
-  
-  # Download
+  # Download data handler
   output$download <- downloadHandler(
     filename = function() {
       "data.csv"
@@ -276,6 +246,43 @@ server <- function(input, output) {
         tags$br(),
         downloadButton("download", "Download as CSV !", icon = icon("download")))
     }
+  })
+  
+  
+  # OBSERVERS -----
+  
+  # If you click on Add, it wil the row to the data
+  observeEvent(input$add, {
+    df <- r_data$data
+    if(is.null(df)) {
+      r_data$data <- r_row()
+    } else {
+      r_data$data <- rbind(df, r_row())
+    }
+  })
+  
+  # Delete rows
+  observeEvent(input$delete, {
+    w <- input$ui_table_rows_selected
+    r_data$data <- r_data$data[-w, ]
+  })
+  
+  # Copy rows
+  observeEvent(input$copy, {
+    # Get selected rows
+    w <- input$ui_table_rows_selected
+    rows <- r_data$data[w, ]
+    print(rows)
+    # Duplicate them
+    r_data$data <- rbind(rows, r_data$data)
+  })
+  
+  # Update the data frame if you edit the table
+  observeEvent(input$ui_table_cell_edit, {
+    i  <- input$ui_table_cell_edit$row
+    j <- input$ui_table_cell_edit$col
+    value <- input$ui_table_cell_edit$value
+    r_data$data[i, j] <- value
   })
   
   # Upload
