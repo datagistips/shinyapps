@@ -6,8 +6,10 @@ library(glue)
 library(uuid)
 
 # Read TableSchema
-schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
-schema_url <- "schema--modified.json"
+# schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
+# schema_url <- "schema--modified.json"
+# The default schema URL is in config.yaml
+schema_url <- jsonlite::fromJSON("config.yaml")$schema_url
 j <- jsonlite::fromJSON(schema_url)
 
 # Id column
