@@ -127,9 +127,8 @@ ui <- fluidPage(
     tags$p("This is an adaptation of Etalab", tags$a(href="https://github.com/etalab/csv-gg", "CSV-GG")),
     uiOutput("ui_description"),
     tagList(
-      "Schema URL",
-      textInput("schema_url", label = NULL, value = schema_url, width = "50%"),
-      "↑ It can also be local, for instance 'mypath/schema.json'"),
+      "Schema URL (it can also be local, for instance 'mypath/schema.json')",
+      textInput("schema_url", label = NULL, value = schema_url, width = "50%")),
     tags$hr(),
 
     sidebarLayout(
