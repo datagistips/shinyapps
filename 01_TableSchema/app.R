@@ -126,7 +126,10 @@ ui <- fluidPage(
     tags$p(tags$i("This apps reads a ", tags$a(href="https://specs.frictionlessdata.io/table-schema/", "TableSchema"), " and generates a form depending on the fields listed in the schema")),
     tags$p("This is an adaptation of Etalab", tags$a(href="https://github.com/etalab/csv-gg", "CSV-GG")),
     uiOutput("ui_description"),
-    tagList("Schema URL (you can set it)", textInput("schema_url", label = NULL, value = schema_url, width = "50%")),
+    tagList(
+      "Schema URL",
+      textInput("schema_url", label = NULL, value = schema_url, width = "50%"),
+      "↑ It can also be local, for instance 'mypath/schema.json'"),
     tags$hr(),
 
     sidebarLayout(
