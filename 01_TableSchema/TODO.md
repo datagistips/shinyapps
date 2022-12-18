@@ -2,18 +2,23 @@
 - More fields : boolean, ...
 - Check with more schemas
 - [x] Choose schema
-- Control Checks
+- **Control** Checks
 	- https://cran.r-project.org/web/packages/shinyvalidate/shinyvalidate.pdf
+	- https://rstudio.github.io/shinyvalidate/
+	- https://shiny.rstudio.com/reference/shiny/0.14/validate.html
+	- https://rstudio.github.io/shinyvalidate/articles/displaying.html
 - [x] Upload an existing CSV and editing it
 - Experimental fields : geo
 - Control the validity of the data frame with frictionless
 - [x] Click on row and edit it on the left -> Delete and copy buttons
-- [x] Add action buttons : 
+- [x] Add **action** buttons : 
 	- https://www.r-bloggers.com/2021/01/adding-action-buttons-in-rows-of-dt-data-table-in-r-shiny/
 	- https://stackoverflow.com/questions/28274584/get-selected-row-from-datatable-in-shiny-app
 	- https://community.rstudio.com/t/getting-data-of-selected-rows-in-dt-table-in-shiny-app/134800
 - Intelligent ids with uids
 - Ajouter les exemples dans la description des champs
 - Créer une fonction pour chaque type de champ
-- Lire l'URL du schéma par défaut dans un fichier
+- Lire l'URL du schéma par défaut dans un fichier de configuration
 - Proposition de profils
+- truthValues
+- Sort data.frame descending fid

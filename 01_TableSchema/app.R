@@ -3,10 +3,15 @@ library(jsonlite)
 library(tidyverse)
 library(DT)
 library(glue)
+library(uuid)
 
 # Read TableSchema
 schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
+schema_url <- "schema--modified.json"
 j <- jsonlite::fromJSON(schema_url)
+
+# Id column
+id <- "id"
 
 # > FUNCTIONS ----
 get_fields <- function(j) {
@@ -14,13 +19,14 @@ get_fields <- function(j) {
   fields
 }
 
-get_ui <- function(field) {
+get_ui <- function(field, id = "id") {
   # Gets the UI for a specific field
   
   name <- field$name
   example <- field$example
   description <- field$description
   constraints <- field$constraints
+  type <- field$type
   
   ui_id <- glue("ui__{name}")  # Each UI element will be identified like this : ui__id, ui__date_creation with doubled '_'
   
@@ -77,19 +83,26 @@ get_ui <- function(field) {
   
   # HELP TEXT
   ui <- tagList(ui, 
-                helpText(description)) # We add the description as a help text to fill the information
+                helpText(description, 
+                         "Ex. : ", example)) # We add the description as a help text to fill the information
+  
+  # UUID
+  if(name == id & field$type == "string") {
+    ui <- tagList(ui,
+                  actionButton("uuid", "Generate uuid", icon=icon("fingerprint")))
+  }
   
   return(ui)
 }
 
-get_uis <- function(fields) {
+get_uis <- function(fields, id = "id") {
   # Gets the UI elements
   
   uis <- vector(mode = "list")
   # List all fields and calculate the UI element
   for(i in 1:nrow(fields)) {
     field <- fields[i, ]
-    ui <- get_ui(field)
+    ui <- get_ui(field, id)
     uis[[i]] <- ui
   }
   # Assign the field name to the list of UIs
@@ -154,7 +167,7 @@ ui <- fluidPage(
 
 # > SERVER ----
 # Define server logic
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   # REACTIVE VALUES ----
   
@@ -253,6 +266,13 @@ server <- function(input, output) {
   
   
   # OBSERVERS -----
+  
+  # Generate uuid
+  observeEvent(input$uuid, {
+    uuid <- UUIDgenerate()
+    updateTextInput(session, "ui__id",
+                      value = uuid)
+  })
   
   # If you click on Add, it wil the row to the data
   observeEvent(input$add, {
