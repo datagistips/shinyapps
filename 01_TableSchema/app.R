@@ -2,12 +2,18 @@ library(shiny)
 library(jsonlite)
 library(tidyverse)
 library(DT)
+library(glue)
 
 # Read TableSchema
-url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
-j <- jsonlite::fromJSON(url)
+schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
+j <- jsonlite::fromJSON(schema_url)
 
-# FUNCTIONS
+# > FUNCTIONS ----
+get_fields <- function(j) {
+  fields <- j$fields
+  fields
+}
+
 get_ui <- function(field) {
   # Gets the UI for a specific field
   
@@ -102,30 +108,28 @@ get_description <- function(j) {
   contributors <- j$contributors
   contributors <- glue("{contributors$title} ({contributors$email}") %>% paste(collapse=", ")
   
-  tagList(tags$p("Name : ", tags$a(href = url, name)), 
+  tagList(tags$p("Name : ", name), 
           tags$p("Title : ", title),
           tags$p("Description : ", description),
           tags$p("Authors : ", contributors))
 }
 
-# Calculate description
-schema_description <- get_description(j)
-
-# Calculate UI elements
-uis <- get_uis(fields)
-
 # NOW is the app !
 
-# UI ----
+# > UI ----
 ui <- fluidPage(
     
     # Title panel
     titlePanel("TableSchema example"),
     
     # Some description
-    tags$p(tags$i("This apps reads a ", tags$a(href="https://specs.frictionlessdata.io/table-schema/", "TableSchema"), " and generates a form depending on the fields listed in the schema")),
-    tags$p("This is an adaptation of Etalab", tags$a(href="https://github.com/etalab/csv-gg", "CSV-GG")),
-    schema_description,
+    tags$p("This apps reads a ", tags$a(href="https://specs.frictionlessdata.io/table-schema/", "TableSchema"), ", generates a form to fill in data that respects the schema",
+           "It is an adaptation of Etalab", tags$a(href="https://github.com/etalab/csv-gg", "CSV-GG")),
+    tags$hr(),
+    uiOutput("ui_description"),
+    tagList(
+      "Schema URL (it can also be local, for instance copy 'schema--modified.json')",
+      textInput("schema_url", label = NULL, value = schema_url, width = "50%")),
     tags$hr(),
 
     sidebarLayout(
@@ -137,23 +141,42 @@ ui <- fluidPage(
 
       # Show a table of the data
       mainPanel(
+        fileInput("upload", NULL, buttonLabel = "Modify a CSV...", multiple = FALSE, accept = c(".csv")),
         uiOutput("ui_text"),
+        tags$br(),
+        uiOutput("ui_edit_buttons"),
         tags$br(),
         dataTableOutput("ui_table"),
         uiOutput("ui_download")
       )
-    )
+    ),
+    tags$hr(),
+    "Created by Mathieu Rajerison (@datagistips), licensed under MIT Licence",
 )
 
-# SERVER ----
+# > SERVER ----
 # Define server logic
 server <- function(input, output) {
   
-  # Generate input panel
-  output$ui_inputs <- renderUI({
-    tagList(uis)
+  # REACTIVE VALUES ----
+  
+  # Get schema URL
+  r_fields <- reactive({
+    schema_url <- input$schema_url
+    j <- jsonlite::fromJSON(schema_url)
+    fields <- get_fields(j)
+    return(fields)
   })
   
+  # Get schema description
+  r_description <- reactive({
+    return(get_description(j))
+  })
+  
+  # Get UIS
+  r_uis <- reactive({
+    return(get_uis(r_fields()))
+  })
   # Store the row
   r_row <- reactive({
     # Select only form inputs (they start with 'ui__')
@@ -171,19 +194,34 @@ server <- function(input, output) {
   # This reactive Value will store the data frame  
   r_data <- reactiveValues(data = NULL)
   
-  # If you click on Add, it wil the row to the data
-  observeEvent(input$add, {
-    df <- r_data$data
-    if(is.null(df)) {
-      r_data$data <- r_row()
-    } else {
-      r_data$data <- rbind(df, r_row())
-    }
+  
+  # OUTPUTS ----
+  
+  # Render description
+  output$ui_description <- renderUI({
+    r_description()
+  })
+  
+  # Generate input panel
+  output$ui_inputs <- renderUI({
+    tagList(r_uis())
   })
   
   # Render data (which is in a reactive value)
   output$ui_table <- renderDT({
     datatable(r_data$data, editable = TRUE)
+  })
+  
+  # Render edit buttons  
+  output$ui_edit_buttons <- renderUI({
+    if(!is.null(input$ui_table_rows_selected)) {
+      s <- ifelse(length(input$ui_table_rows_selected) == 1, "row", "rows")
+      tagList(
+        # actionButton("edit", "Edit"),
+        actionButton("delete", glue("Delete {s}"), icon = icon("trash")),
+        actionButton("copy", glue("Copy {s}"), icon = icon("copy"))
+        )
+    }
   })
   
   # Present the data (number of rows)
@@ -196,15 +234,7 @@ server <- function(input, output) {
     }
   })
   
-  # Update the data frame if you edit the table
-  observeEvent(input$ui_table_cell_edit, {
-    i  <- input$ui_table_cell_edit$row
-    j <- input$ui_table_cell_edit$col
-    value <- input$ui_table_cell_edit$value
-    r_data$data[i, j] <- value
-  })
-  
-  # Download
+  # Download data handler
   output$download <- downloadHandler(
     filename = function() {
       "data.csv"
@@ -217,9 +247,54 @@ server <- function(input, output) {
   # Download button or not download button
   output$ui_download <- renderUI({
     if(!is.null(r_data$data)) {
-      tagList(tags$hr(),
-              downloadButton("download", "Download as CSV !", icon = icon("download")))
+      tagList(
+        tags$br(),
+        downloadButton("download", "Download as CSV !", icon = icon("download")))
     }
+  })
+  
+  
+  # OBSERVERS -----
+  
+  # If you click on Add, it wil the row to the data
+  observeEvent(input$add, {
+    df <- r_data$data
+    if(is.null(df)) {
+      r_data$data <- r_row()
+    } else {
+      r_data$data <- rbind(df, r_row())
+    }
+  })
+  
+  # Delete rows
+  observeEvent(input$delete, {
+    w <- input$ui_table_rows_selected
+    r_data$data <- r_data$data[-w, ]
+  })
+  
+  # Copy rows
+  observeEvent(input$copy, {
+    # Get selected rows
+    w <- input$ui_table_rows_selected
+    rows <- r_data$data[w, ]
+    print(rows)
+    # Duplicate them
+    r_data$data <- rbind(rows, r_data$data)
+  })
+  
+  # Update the data frame if you edit the table
+  observeEvent(input$ui_table_cell_edit, {
+    i  <- input$ui_table_cell_edit$row
+    j <- input$ui_table_cell_edit$col
+    value <- input$ui_table_cell_edit$value
+    r_data$data[i, j] <- value
+  })
+  
+  # Upload
+  observe({
+    req(input$upload)
+    datapath <- input$upload$datapath
+    r_data$data <- read.csv(datapath)
   })
 }
 
