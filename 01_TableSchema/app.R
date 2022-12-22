@@ -313,7 +313,10 @@ server <- function(input, output, session) {
           actionButton("copy", glue("Copy {s}"), icon = icon("copy")))
       } else {
         res <- ""
+        if(!is.null(r_data$data)) {
+          res <- tags$span("Click on a row to select it and remove or copy. Double-click on one or multiple rows to edit.", style="font-style:italic;")
         }
+      }
     div(res, style = "height:30px;")
   })
   
