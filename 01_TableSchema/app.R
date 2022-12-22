@@ -55,6 +55,13 @@ get_ui <- function(field, id = "id") {
       names(enum) <- enum
       ui <- selectInput(ui_id, name_display, choices = enum, multiple = FALSE)
     }
+    
+    # UUID
+    if(name == id & field$type == "string") {
+      ui <- fluidRow(column(9, ui),
+                     column(3, actionButton("uuid", "Generate uuid", icon=icon("fingerprint")), style="margin-top:22px;"))
+    }
+    
   }
   
   # NUMERIC INPUT
@@ -85,12 +92,6 @@ get_ui <- function(field, id = "id") {
   ui <- tagList(ui, 
                 helpText(description, 
                          "Ex. : ", example)) # We add the description as a help text to fill the information
-  
-  # UUID
-  if(name == id & field$type == "string") {
-    ui <- tagList(ui,
-                  actionButton("uuid", "Generate uuid", icon=icon("fingerprint")))
-  }
   
   return(ui)
 }
