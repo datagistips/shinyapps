@@ -6,8 +6,8 @@ library(glue)
 library(uuid)
 
 # Read TableSchema
-schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
-schema_url <- "schema--modified.json"
+# schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
+schema_url <- "schema-for-uuid.json"
 j <- jsonlite::fromJSON(schema_url)
 
 # Id column
@@ -122,9 +122,8 @@ get_description <- function(j) {
   contributors <- j$contributors
   contributors <- glue("{contributors$title} ({contributors$email}") %>% paste(collapse=", ")
   
-  tagList(tags$p("Name : ", name), 
-          tags$p("Title : ", title),
-          tags$p("Description : ", description),
+  tagList(tags$p(tags$strong(glue("{title} ({name})"))),
+          tags$p(description),
           tags$p("Authors : ", contributors))
 }
 
@@ -139,10 +138,14 @@ ui <- fluidPage(
     # Some description
     tags$p("This apps reads a ", tags$a(href="https://specs.frictionlessdata.io/table-schema/", "TableSchema"), ", generates a form to fill in data that respects the schema.", "It is an adaptation of Etalab", tags$a(href="https://github.com/etalab/csv-gg", "CSV-GG")),
     tags$hr(),
-    uiOutput("ui_description"),
     tagList(
-      "Schema URL (it can also be local, for instance copy 'schema.json')",
-      textInput("schema_url", label = NULL, value = schema_url, width = "50%")),
+      # "Schema URL (also local, for instance 'schema.json')",
+      fluidRow(
+        column(3, textInput("schema_url", label = NULL, value = schema_url, width = "100%")),
+        column(2, tags$a(href = schema_url, tagList(icon("arrow-right"), "Open schema"), target = "_blank"), style = "text-align:left;padding-top:8px;"), style="margin-bottom: -15px;")),
+    tags$hr(),
+    uiOutput("ui_description"),
+    
     tags$hr(),
 
     sidebarLayout(
