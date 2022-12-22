@@ -5,15 +5,29 @@ library(DT)
 library(glue)
 library(uuid)
 
-# Read TableSchema
-# schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
-# schema_url <- "schema--modified.json"
-# The default schema URL is in config.yaml
-schema_url <- jsonlite::fromJSON("config.yaml")$schema_url
-j <- jsonlite::fromJSON(schema_url)
+# Default URL
+default_url <- function(schema_url) {
+  j <- jsonlite::fromJSON(schema_url)
+  j$schema_url
+}
 
-# Id column
-id <- "id"
+schema_url <- default_url("default.json")
+
+# ID Field
+default_id <- function(schema_url) {
+  file.exists(schema_url)
+  j <- jsonlite::fromJSON(schema_url)
+  schema_name <- j$name
+  config_file <- glue("objets-importants.json")
+  file.exists(config_file)
+  if(file.exists(config_file)) {
+    conf <- jsonlite::fromJSON(config_file)
+    id <- conf$id
+    return(id)
+  } else {
+    return()
+  }
+}
 
 # > FUNCTIONS ----
 get_fields <- function(j) {
@@ -57,6 +71,13 @@ get_ui <- function(field, id = "id") {
       names(enum) <- enum
       ui <- selectInput(ui_id, name_display, choices = enum, multiple = FALSE)
     }
+    
+    # UUID
+    if(name == id & field$type == "string") {
+      ui <- fluidRow(column(9, ui),
+                     column(3, actionButton("uuid", "Generate uuid", icon=icon("fingerprint")), style="margin-top:22px;"))
+    }
+    
   }
   
   # NUMERIC INPUT
@@ -88,12 +109,6 @@ get_ui <- function(field, id = "id") {
                 helpText(description, 
                          "Ex. : ", example)) # We add the description as a help text to fill the information
   
-  # UUID
-  if(name == id & field$type == "string") {
-    ui <- tagList(ui,
-                  actionButton("uuid", "Generate uuid", icon=icon("fingerprint")))
-  }
-  
   return(ui)
 }
 
@@ -123,9 +138,8 @@ get_description <- function(j) {
   contributors <- j$contributors
   contributors <- glue("{contributors$title} ({contributors$email}") %>% paste(collapse=", ")
   
-  tagList(tags$p("Name : ", name), 
-          tags$p("Title : ", title),
-          tags$p("Description : ", description),
+  tagList(tags$p(tags$strong(glue("{title} ({name})"))),
+          tags$p(description),
           tags$p("Authors : ", contributors))
 }
 
@@ -138,33 +152,50 @@ ui <- fluidPage(
     titlePanel("TableSchema example"),
     
     # Some description
-    tags$p(tags$i("This apps reads a ", tags$a(href="https://specs.frictionlessdata.io/table-schema/", "TableSchema"), " and generates a form depending on the fields listed in the schema")),
-    tags$p("This is an adaptation of Etalab", tags$a(href="https://github.com/etalab/csv-gg", "CSV-GG")),
-    uiOutput("ui_description"),
+    tags$p("This apps reads a ", tags$a(href="https://specs.frictionlessdata.io/table-schema/", "TableSchema"), ", generates a form to fill in data that respects the schema.", "It is an adaptation of Etalab", tags$a(href="https://github.com/etalab/csv-gg", "CSV-GG")),
+    tags$hr(),
     tagList(
-      "Schema URL",
-      textInput("schema_url", label = NULL, value = schema_url, width = "50%"),
-      "↑ It can also be local, for instance 'mypath/schema.json'"),
+      # "Schema URL (also local, for instance 'schema.json')",
+      fluidRow(
+        column(3, textInput("schema_url", label = NULL, value = schema_url, width = "100%")),
+        column(2, 
+               tagList(
+                 tags$a(href = gsub("www/", "", schema_url), tagList(icon("arrow-right"), "Open schema"), target = "_blank"),
+                 HTML("&nbsp;&nbsp;"),
+                 actionLink("examples", tagList(icon("arrow-right"), "Examples"))),
+               style = "text-align:left;padding-top:8px;"), 
+        style="margin-bottom: -15px;")),
+    tags$hr(),
+    uiOutput("ui_description"),
+    
     tags$hr(),
 
     sidebarLayout(
       # Sidebar with form input
       sidebarPanel(
             uiOutput("ui_inputs"),
-            actionButton("add", "Add", icon = icon("plus"))
+            uiOutput("ui_add"),
         ),
 
       # Show a table of the data
       mainPanel(
         fileInput("upload", NULL, buttonLabel = "Modify a CSV...", multiple = FALSE, accept = c(".csv")),
-        uiOutput("ui_text"),
-        tags$br(),
-        uiOutput("ui_edit_buttons"),
-        tags$br(),
-        dataTableOutput("ui_table"),
-        uiOutput("ui_download")
+        div(
+          uiOutput("ui_text"),
+          tags$br(),
+          uiOutput("ui_edit_buttons"),
+          tags$br(),
+          dataTableOutput("ui_table"),
+          uiOutput("ui_download"),
+          style="padding:20px;border:1px solid #e3e3e3;border-radius:4px;")
       )
-    )
+    ),
+    tags$hr(),
+    tagList("Created by Mathieu Rajerison (", tags$a(href="https://twitter.com/datagistips", "@datagistips", target="_blank"),") "),
+    ", licensed under MIT Licence",
+    tags$br(),
+    tags$a(href="https://github.com/datagistips/shinyapps/tree/main/01_TableSchema", "View code on github", target="_blank")
+    
 )
 
 # > SERVER ----
@@ -173,28 +204,66 @@ server <- function(input, output, session) {
   
   # REACTIVE VALUES ----
   
+  # JSON data
+  r_j <- reactive({
+    req(input$schema_url)
+    j <- jsonlite::fromJSON(input$schema_url)
+    return(j)
+  })
+  
+  # Is schema valid ?
+  r_valid <- reactive({
+    schema_url <- input$schema_url
+    
+    valid_url <- function(url_in, t=2){
+      con <- url(url_in)
+      check <- suppressWarnings(try(open.connection(con,open="rt",timeout=t),silent=T)[1])
+      suppressWarnings(try(close.connection(con),silent=T))
+      ifelse(is.null(check),TRUE,FALSE)
+    }
+    
+    if(grepl("^http", schema_url)) {
+      return(valid_url(schema_url))
+    } else {
+      return(file.exists(schema_url))
+    }
+    
+    return(valid)
+  })
+  
+  # Get Id from schema
+  r_id <- reactive({
+    id <- default_id(input$schema_url)
+    print(id)
+    return(id)
+  })
+  
   # Get schema URL
   r_fields <- reactive({
-    schema_url <- input$schema_url
-    j <- jsonlite::fromJSON(schema_url)
-    fields <- get_fields(j)
+    
+    if(!r_valid()) return()
+    fields <- get_fields(r_j())
+    
     return(fields)
   })
   
   # Get schema description
   r_description <- reactive({
-    return(get_description(j))
+    return(get_description(r_j()))
   })
   
   # Get UIS
   r_uis <- reactive({
-    return(get_uis(r_fields()))
+    if(is.null(r_fields())) return("Schema could not be read ! :-(")
+    uis <- get_uis(r_fields(), 
+                   id = r_id())
+    return(uis)
   })
+  
   # Store the row
   r_row <- reactive({
     # Select only form inputs (they start with 'ui__')
-    w <- grep("^ui__", names(input))
-    input_names <- names(input)[w]
+    input_names <- paste0("ui__", r_fields()$name)
     l <- lapply(input_names, function(x) input[[x]])
     # Convert the list to a data frame
     df <- data.frame(l)
@@ -209,6 +278,15 @@ server <- function(input, output, session) {
   
   
   # OUTPUTS ----
+  
+  # "Add" button
+  output$ui_add <- renderUI({
+    if(r_valid()) {
+      actionButton("add", "Add", icon = icon("plus"))
+    } else {
+      return()
+    }
+  })
   
   # Render description
   output$ui_description <- renderUI({
@@ -229,12 +307,14 @@ server <- function(input, output, session) {
   output$ui_edit_buttons <- renderUI({
     if(!is.null(input$ui_table_rows_selected)) {
       s <- ifelse(length(input$ui_table_rows_selected) == 1, "row", "rows")
-      tagList(
+      res <- tagList(
         # actionButton("edit", "Edit"),
-        actionButton("delete", glue("Delete {s}"), icon = icon("trash")),
-        actionButton("copy", glue("Copy {s}"), icon = icon("copy"))
-        )
-    }
+          actionButton("delete", glue("Delete {s}"), icon = icon("trash")),
+          actionButton("copy", glue("Copy {s}"), icon = icon("copy")))
+      } else {
+        res <- ""
+        }
+    div(res, style = "height:30px;")
   })
   
   # Present the data (number of rows)
@@ -242,7 +322,8 @@ server <- function(input, output, session) {
     if(is.null(r_data$data)) {
       return("No rows for the moment...")
     } else {
-      s <- tagList(tags$strong(nrow(r_data$data)), " rows (you can edit the table by double-clicking on the cell)")
+      n <- nrow(r_data$data)
+      s <- tagList(tags$strong(n), glue(" {ifelse(n == 1, 'row', 'rows')} (you can edit the table by double-clicking on the cell)"))
       return(s)
     }
   })
@@ -268,6 +349,13 @@ server <- function(input, output, session) {
   
   
   # OBSERVERS -----
+  
+  # Examples
+  observeEvent(input$examples, {
+    examples <- c("https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json", "schema.json")
+    examples <- lapply(examples, function(x) tags$p(x)) %>% tagList
+    showModal(modalDialog(title = NULL, examples, footer = NULL, easyClose = T))
+  })
   
   # Generate uuid
   observeEvent(input$uuid, {

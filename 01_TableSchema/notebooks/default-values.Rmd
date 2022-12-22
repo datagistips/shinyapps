@@ -1,0 +1,34 @@
+---
+title: "Default values"
+output: html_notebook
+---
+
+```{r}
+default_url <- function(schema_url) {
+  j <- jsonlite::fromJSON(schema_url)
+  j$schema_url
+}
+default_url("../default.json")
+```
+
+Lecture des informations associées à un schéma en particulier
+```{r}
+schema_url <- "../www/schema-uuid.json"
+
+default_id <- function(schema_url) {
+  file.exists(schema_url)
+  j <- jsonlite::fromJSON(schema_url)
+  schema_name <- j$name
+  config_file <- glue("../objets-importants.json")
+  file.exists(config_file)
+  if(file.exists(config_file)) {
+    conf <- jsonlite::fromJSON(config_file)
+    id <- conf$id
+    return(id)
+  } else {
+    return()
+  }
+}
+default_id(schema_url)
+```
+
