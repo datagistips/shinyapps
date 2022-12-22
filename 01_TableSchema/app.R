@@ -6,8 +6,7 @@ library(glue)
 library(uuid)
 
 # Read TableSchema
-# schema_url <- "https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json"
-schema_url <- "schema-for-uuid.json"
+schema_url <- "www/schema-for-uuid.json"
 j <- jsonlite::fromJSON(schema_url)
 
 # Id column
@@ -141,8 +140,14 @@ ui <- fluidPage(
     tagList(
       # "Schema URL (also local, for instance 'schema.json')",
       fluidRow(
-        column(3, textInput("schema_url", label = NULL, value = schema_url, width = "100%")),
-        column(2, tags$a(href = schema_url, tagList(icon("arrow-right"), "Open schema"), target = "_blank"), style = "text-align:left;padding-top:8px;"), style="margin-bottom: -15px;")),
+        column(3, textInput("schema_url", label = NULL, value = gsub("^www/", "", schema_url), width = "100%")),
+        column(2, 
+               tagList(
+                 tags$a(href = schema_url, tagList(icon("arrow-right"), "Open schema"), target = "_blank"),
+                 HTML("&nbsp;&nbsp;"),
+                 actionLink("examples", tagList(icon("arrow-right"), "Examples"))),
+               style = "text-align:left;padding-top:8px;"), 
+        style="margin-bottom: -15px;")),
     tags$hr(),
     uiOutput("ui_description"),
     
@@ -171,7 +176,7 @@ ui <- fluidPage(
     tags$hr(),
     "Created by Mathieu Rajerison (@datagistips), licensed under MIT Licence",
     tags$br(),
-    tags$a(href="https://github.com/datagistips/shinyapps/tree/main/01_TableSchema", "View code on github")
+    tags$a(href="https://github.com/datagistips/shinyapps/tree/main/01_TableSchema", "View code on github", target="_blank")
     
 )
 
@@ -313,6 +318,13 @@ server <- function(input, output, session) {
   
   
   # OBSERVERS -----
+  
+  # Examples
+  observeEvent(input$examples, {
+    examples <- c("https://raw.githubusercontent.com/etalab/tableschema-template/master/schema.json", "schema.json")
+    examples <- lapply(examples, function(x) tags$p(x)) %>% tagList
+    showModal(modalDialog(title = NULL, examples, footer = NULL, easyClose = T))
+  })
   
   # Generate uuid
   observeEvent(input$uuid, {
