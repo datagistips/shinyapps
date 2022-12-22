@@ -32,3 +32,11 @@ default_id <- function(schema_url) {
 default_id(schema_url)
 ```
 
+Lecture de la clé primaire
+```{r}
+schema_url <- "../www/schema-uuid.json"
+j <- jsonlite::fromJSON(schema_url)
+if("primaryKey" %in% names(j)) print(j$primaryKey)
+```
+
+

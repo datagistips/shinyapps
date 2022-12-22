@@ -15,11 +15,14 @@ schema_url <- default_url("default.json")
 
 # ID Field
 default_id <- function(schema_url) {
-  file.exists(schema_url)
   j <- jsonlite::fromJSON(schema_url)
+  
+  # If primary key specified, use it
+  if("primaryKey" %in% names(j)) return(j$primaryKey)
+  
+  # If not, try to access it through the schema config file (if it exists)
   schema_name <- j$name
-  config_file <- glue("objets-importants.json")
-  file.exists(config_file)
+  config_file <- glue("{schema_name}.json")
   if(file.exists(config_file)) {
     conf <- jsonlite::fromJSON(config_file)
     id <- conf$id

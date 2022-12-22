@@ -1767,9 +1767,6 @@ display: none;
 }
 default_url(&quot;../default.json&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwid3d3L3NjaGVtYS11dWlkLmpzb25cIlxuIn0= -->
-<pre><code>[1] &quot;www/schema-uuid.json&quot;</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Lecture des informations associées à un schéma en particulier</p>
@@ -1794,14 +1791,22 @@ default_id &lt;- function(schema_url) {
 }
 default_id(schema_url)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiaWRcIlxuIn0= -->
-<pre><code>[1] &quot;id&quot;</code></pre>
-<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Lecture de la clé primaire</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2NoZW1hX3VybCA8LSBcIi4uL3d3dy9zY2hlbWEtdXVpZC5qc29uXCJcbmogPC0ganNvbmxpdGU6OmZyb21KU09OKHNjaGVtYV91cmwpXG5zY2hlbWFfbmFtZSA8LSBqJG5hbWVcbmNvbmZpZ19maWxlIDwtIGdsdWUoXCJ7c2NoZW1hX25hbWV9Lmpzb25cIilcbmBgYCJ9 -->
+<pre class="r"><code>schema_url &lt;- &quot;../www/schema-uuid.json&quot;
+j &lt;- jsonlite::fromJSON(schema_url)
+schema_name &lt;- j$name
+config_file &lt;- glue(&quot;{schema_name}.json&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRlZmF1bHQgdmFsdWVzIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KYGBge3J9DQpkZWZhdWx0X3VybCA8LSBmdW5jdGlvbihzY2hlbWFfdXJsKSB7DQogIGogPC0ganNvbmxpdGU6OmZyb21KU09OKHNjaGVtYV91cmwpDQogIGokc2NoZW1hX3VybA0KfQ0KZGVmYXVsdF91cmwoIi4uL2RlZmF1bHQuanNvbiIpDQpgYGANCg0KTGVjdHVyZSBkZXMgaW5mb3JtYXRpb25zIGFzc29jacOpZXMgw6AgdW4gc2Now6ltYSBlbiBwYXJ0aWN1bGllcg0KYGBge3J9DQpzY2hlbWFfdXJsIDwtICIuLi93d3cvc2NoZW1hLXV1aWQuanNvbiINCg0KZGVmYXVsdF9pZCA8LSBmdW5jdGlvbihzY2hlbWFfdXJsKSB7DQogIGZpbGUuZXhpc3RzKHNjaGVtYV91cmwpDQogIGogPC0ganNvbmxpdGU6OmZyb21KU09OKHNjaGVtYV91cmwpDQogIHNjaGVtYV9uYW1lIDwtIGokbmFtZQ0KICBjb25maWdfZmlsZSA8LSBnbHVlKCIuLi9vYmpldHMtaW1wb3J0YW50cy5qc29uIikNCiAgZmlsZS5leGlzdHMoY29uZmlnX2ZpbGUpDQogIGlmKGZpbGUuZXhpc3RzKGNvbmZpZ19maWxlKSkgew0KICAgIGNvbmYgPC0ganNvbmxpdGU6OmZyb21KU09OKGNvbmZpZ19maWxlKQ0KICAgIGlkIDwtIGNvbmYkaWQNCiAgICByZXR1cm4oaWQpDQogIH0gZWxzZSB7DQogICAgcmV0dXJuKCkNCiAgfQ0KfQ0KZGVmYXVsdF9pZChzY2hlbWFfdXJsKQ0KYGBgDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRlZmF1bHQgdmFsdWVzIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KYGBge3J9DQpkZWZhdWx0X3VybCA8LSBmdW5jdGlvbihzY2hlbWFfdXJsKSB7DQogIGogPC0ganNvbmxpdGU6OmZyb21KU09OKHNjaGVtYV91cmwpDQogIGokc2NoZW1hX3VybA0KfQ0KZGVmYXVsdF91cmwoIi4uL2RlZmF1bHQuanNvbiIpDQpgYGANCg0KTGVjdHVyZSBkZXMgaW5mb3JtYXRpb25zIGFzc29jacOpZXMgw6AgdW4gc2Now6ltYSBlbiBwYXJ0aWN1bGllcg0KYGBge3J9DQpzY2hlbWFfdXJsIDwtICIuLi93d3cvc2NoZW1hLXV1aWQuanNvbiINCg0KZGVmYXVsdF9pZCA8LSBmdW5jdGlvbihzY2hlbWFfdXJsKSB7DQogIGZpbGUuZXhpc3RzKHNjaGVtYV91cmwpDQogIGogPC0ganNvbmxpdGU6OmZyb21KU09OKHNjaGVtYV91cmwpDQogIHNjaGVtYV9uYW1lIDwtIGokbmFtZQ0KICBjb25maWdfZmlsZSA8LSBnbHVlKCIuLi9vYmpldHMtaW1wb3J0YW50cy5qc29uIikNCiAgZmlsZS5leGlzdHMoY29uZmlnX2ZpbGUpDQogIGlmKGZpbGUuZXhpc3RzKGNvbmZpZ19maWxlKSkgew0KICAgIGNvbmYgPC0ganNvbmxpdGU6OmZyb21KU09OKGNvbmZpZ19maWxlKQ0KICAgIGlkIDwtIGNvbmYkaWQNCiAgICByZXR1cm4oaWQpDQogIH0gZWxzZSB7DQogICAgcmV0dXJuKCkNCiAgfQ0KfQ0KZGVmYXVsdF9pZChzY2hlbWFfdXJsKQ0KYGBgDQoNCkxlY3R1cmUgZGUgbGEgY2zDqSBwcmltYWlyZQ0KYGBge3J9DQpzY2hlbWFfdXJsIDwtICIuLi93d3cvc2NoZW1hLXV1aWQuanNvbiINCmogPC0ganNvbmxpdGU6OmZyb21KU09OKHNjaGVtYV91cmwpDQppZigicHJpbWFyeUtleSIgJWluJSBuYW1lcyhqKSkgcHJpbnQoaiRwcmltYXJ5S2V5KQ0KYGBgDQoNCg0K</div>
 
 
 
