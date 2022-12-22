@@ -1,0 +1,212 @@
+[33mcommit b71cbb33b0519a2c46914d8795e64eab71306f5e[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 11:09:05 2022 +0100
+
+    remove tmp
+
+[33mcommit 04177f4936314ab886f59893449aff1089f7472d[m
+Merge: 5eb265f 1c2feff
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 11:07:32 2022 +0100
+
+    resolve conflicts
+
+[33mcommit 5eb265facfb071dc8548c91077f57fe86f654885[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 11:01:09 2022 +0100
+
+    next
+
+[33mcommit 1c2feff2adb619a52d05783781d99c3296a5fecc[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m, [m[1;32m2_default_values[m[33m)[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 10:19:38 2022 +0100
+
+    display : click or double click
+
+[33mcommit aaa2e9cf35d677bf200bae5f487b37255b9a1f19[m
+Merge: c500a98 529c00e
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 10:13:00 2022 +0100
+
+    read default values
+
+[33mcommit 529c00ebb6a00e3631c874d08008fd830151e285[m[33m ([m[1;32m1_uuids[m[33m)[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 09:31:15 2022 +0100
+
+    update footer
+
+[33mcommit fc813c9c3b7490a5da91022ee59d178126529988[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 09:17:19 2022 +0100
+
+    rename uuid schema
+
+[33mcommit 67c5e1ef7c7f789083d249ea1f4e0499041603e0[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 09:15:51 2022 +0100
+
+    add examples
+
+[33mcommit c968e2d79b196ab86e20a66eb16776372ca88beb[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 09:08:07 2022 +0100
+
+    schema information and open schema
+
+[33mcommit d56d18e661b62964b4e6a66961015a4a70ec511d[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 08:47:09 2022 +0100
+
+    restyle uuid
+
+[33mcommit 5c9ca438ee1d64a7dfff807be389a7d0f8279d90[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 08:29:52 2022 +0100
+
+    Adds from master
+
+[33mcommit 46d80adc9a4d5b0e8e32b5a0daaebc65baef524f[m
+Merge: 256d80d ee67cb1
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Thu Dec 22 08:17:35 2022 +0100
+
+    Merge branch 'master' into 1_uuids
+
+[33mcommit 0514f419cc0a951cc2717ead16157cc47b8fca4f[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Mon Dec 19 17:13:26 2022 +0100
+
+    cell clicked
+
+[33mcommit 0c8f480548be050d211dc365bc1ef25651211166[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Mon Dec 19 14:47:49 2022 +0100
+
+    fixed height for buttons
+
+[33mcommit 6de8dea364781fbc7254cbe198abc6678e466c3b[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Mon Dec 19 14:39:37 2022 +0100
+
+    add border to table
+
+[33mcommit 1557b72f0bd403fc497288b886cf0d76b83c0829[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Mon Dec 19 14:29:38 2022 +0100
+
+    check existence of schema
+
+[33mcommit d2d0a101b6a71809237cb0047f737f3defa199f7[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Mon Dec 19 14:12:13 2022 +0100
+
+    schema path
+
+[33mcommit 8022842892b505cd941e4115fe45906c1be7d8d1[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Mon Dec 19 13:58:22 2022 +0100
+
+    fix data.csv
+
+[33mcommit 3cee9d50ffa894aee531d95852777f13c6083a75[m
+Author: datagistips <mathieu.rajerison@gmail.com>
+Date:   Mon Dec 19 13:56:19 2022 +0100
+
+    misc
+
+[33mcommit 8350c92fe6469968c4002fbb6ceb301badec2b05[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Mon Dec 19 13:28:12 2022 +0100
+
+    next
+
+[33mcommit 07b7acde7796d5869ed3b01a98be00f035297d71[m
+Author: Mathieu Rajerison <mathieu.rajerison@gmail.com>
+Date:   Sat Dec 17 12:15:05 2022 +0100
+
+    init
+
+[33mcommit ee67cb1c5205373ba19f6c727bfb4038d79467b4[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Mon Dec 19 12:58:06 2022 +0100
+
+    cleaning
+
+[33mcommit 93b5efc7952196fa9f5532d0b5c57f25e6a4d1d9[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 15:37:40 2022 +0100
+
+    app credit
+
+[33mcommit daab79f93bb56d000002b1a01ad1e548fd2ca86c[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 15:33:35 2022 +0100
+
+    misc
+
+[33mcommit c500a9820a4dc4912b848660db08b51ddfe61604[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 09:52:43 2022 +0100
+
+    default values
+
+[33mcommit 256d80dc85a5fadc01b95b838f332083ec187b2e[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 09:46:58 2022 +0100
+
+    uuidgenerate
+
+[33mcommit 9030ca175ca635843ec1fb81025200c5ffce09ad[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 06:25:09 2022 +0100
+
+    local schema.json
+
+[33mcommit c1347dea0ac91375a5d8f0aec771dd8f6aaa0c94[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 06:18:17 2022 +0100
+
+    reordering
+
+[33mcommit 3c5aef972b184b9c81ae98e11d719933072e0b4a[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 06:13:13 2022 +0100
+
+    readme
+
+[33mcommit e62226b8dd0b531e16f34dd805734c7a21e17fad[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 00:17:46 2022 +0100
+
+    todo
+
+[33mcommit d881d9f9cc1617dca355ea784c5201a947c2cdb7[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sun Dec 18 00:16:10 2022 +0100
+
+    Modify schema URL
+
+[33mcommit 62e97cacc865944ab4cacf8dfea0e37d0616f01b[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sat Dec 17 23:59:32 2022 +0100
+
+    cleaning
+
+[33mcommit 495069ae7665475a7f8b383bc2f535d344b08668[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sat Dec 17 23:59:20 2022 +0100
+
+    upload and edit buttons
+
+[33mcommit 721f5fe84919816f287981154020e3c6ede61b2d[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sat Dec 17 12:17:37 2022 +0100
+
+    readme file
+
+[33mcommit 5258b93310c1bb213b07503134bdc3fd7df54fdf[m
+Author: mrajerisonCerema <mathieu.rajerison@cerema.fr>
+Date:   Sat Dec 17 12:15:05 2022 +0100
+
+    init

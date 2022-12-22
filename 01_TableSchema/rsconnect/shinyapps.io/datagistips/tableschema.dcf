@@ -5,7 +5,14 @@ account: datagistips
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7912606
+<<<<<<< HEAD
+bundleId: 6653572
+url: https://datagistips.shinyapps.io/tableschema/
+when: 1671457698.49175
+lastSyncTime: 1671457698.49175
+=======
 bundleId: 6663863
 url: https://datagistips.shinyapps.io/tableschema/
 when: 1671697609.46012
 lastSyncTime: 1671697609.46012
+>>>>>>> 2_default_values

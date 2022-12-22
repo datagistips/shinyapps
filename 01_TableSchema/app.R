@@ -77,7 +77,6 @@ get_ui <- function(field, id = "id") {
       ui <- fluidRow(column(9, ui),
                      column(3, actionButton("uuid", "Generate uuid", icon=icon("fingerprint")), style="margin-top:22px;"))
     }
-    
   }
   
   # NUMERIC INPUT
@@ -195,7 +194,6 @@ ui <- fluidPage(
     ", licensed under MIT Licence",
     tags$br(),
     tags$a(href="https://github.com/datagistips/shinyapps/tree/main/01_TableSchema", "View code on github", target="_blank")
-    
 )
 
 # > SERVER ----
@@ -279,6 +277,13 @@ server <- function(input, output, session) {
   
   # OUTPUTS ----
   
+  # # Foo
+  # output$foo <- renderPrint({
+  #   print(input$ui_table_cell_clicked$row)
+  #   print(input$ui_table_cell_clicked$col)
+  # })
+  
+  # Add button ?
   # "Add" button
   output$ui_add <- renderUI({
     if(r_valid()) {

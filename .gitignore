@@ -2,3 +2,12 @@
 .Rhistory
 .RData
 .Ruserdata
+<<<<<<< HEAD
+deploy/*
+deploy
+deploy/
+.Rproj.user/
+tests
+tests/
+=======
+>>>>>>> 2_default_values

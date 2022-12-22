@@ -18,6 +18,8 @@
 - Intelligent ids with uids
 - Ajouter les exemples dans la description des champs
 - Créer une fonction pour chaque type de champ
+- Lire l'URL du schéma par défaut dans un fichier
+- Proposition de profils
 - Lire l'URL du schéma par défaut dans un fichier de configuration
 - Proposition de profils
 - truthValues
