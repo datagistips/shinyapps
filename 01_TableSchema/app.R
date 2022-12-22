@@ -331,7 +331,7 @@ server <- function(input, output, session) {
       return("No rows for the moment...")
     } else {
       n <- nrow(r_data$data)
-      s <- tagList(tags$strong(n), glue(" {ifelse(n == 1, 'row', 'rows')} (you can edit the table by double-clicking on the cell)"))
+      s <- tagList(tags$strong(n), glue(" {ifelse(n == 1, 'row', 'rows')}"))
       return(s)
     }
   })
