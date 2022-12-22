@@ -6,7 +6,7 @@ library(glue)
 library(uuid)
 
 # Read TableSchema
-schema_url <- "www/schema-for-uuid.json"
+schema_url <- "www/schema-uuid.json"
 j <- jsonlite::fromJSON(schema_url)
 
 # Id column
@@ -140,10 +140,10 @@ ui <- fluidPage(
     tagList(
       # "Schema URL (also local, for instance 'schema.json')",
       fluidRow(
-        column(3, textInput("schema_url", label = NULL, value = gsub("^www/", "", schema_url), width = "100%")),
+        column(3, textInput("schema_url", label = NULL, value = schema_url, width = "100%")),
         column(2, 
                tagList(
-                 tags$a(href = schema_url, tagList(icon("arrow-right"), "Open schema"), target = "_blank"),
+                 tags$a(href = gsub("www/", "", schema_url), tagList(icon("arrow-right"), "Open schema"), target = "_blank"),
                  HTML("&nbsp;&nbsp;"),
                  actionLink("examples", tagList(icon("arrow-right"), "Examples"))),
                style = "text-align:left;padding-top:8px;"), 
