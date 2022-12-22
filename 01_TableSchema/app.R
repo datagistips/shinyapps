@@ -174,7 +174,8 @@ ui <- fluidPage(
       )
     ),
     tags$hr(),
-    "Created by Mathieu Rajerison (@datagistips), licensed under MIT Licence",
+    tagList("Created by Mathieu Rajerison (", tags$a(href="https://twitter.com/datagistips", "@datagistips", target="_blank"),") "),
+    ", licensed under MIT Licence",
     tags$br(),
     tags$a(href="https://github.com/datagistips/shinyapps/tree/main/01_TableSchema", "View code on github", target="_blank")
     
